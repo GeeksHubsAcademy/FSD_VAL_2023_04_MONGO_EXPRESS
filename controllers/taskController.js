@@ -1,4 +1,5 @@
 const Task = require("../models/Task");
+const User = require("../models/User");
 
 const taskController = {};
 
@@ -14,11 +15,14 @@ taskController.createTask = async (req, res) => {
             }
         )
 
+        const user = await User.findById(user_id)
+
         return res.status(201).json(
             {
                 success: true,
                 message: "Task created",
-                data: newTask
+                data: newTask,
+                // user: user,
                 // data: {
                 //     title: newTask.title,
                 //     description: newTask.description,
@@ -32,8 +36,12 @@ taskController.createTask = async (req, res) => {
             message: "Task cant be registered",
             error: error.message
         })
+    } finally {
+        console.log('Soy un finally ejemplo');
     }
 }
+
+
 
 
 module.exports = taskController;
