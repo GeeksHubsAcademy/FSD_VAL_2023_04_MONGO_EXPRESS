@@ -18,6 +18,7 @@ app.delete('/users/:id', userController.destroyUser)
 
 //TASKS
 app.post('/tasks', taskController.createTask);
+app.get('/get-tasks-by-user', taskController.getTasksByUser)
 
 // db().then(() => {
 //     console.log('hola');
