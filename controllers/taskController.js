@@ -1,5 +1,6 @@
 const Task = require("../models/Task");
 const User = require("../models/User");
+const taskService = require("../services/taskService");
 
 const taskController = {};
 
@@ -45,18 +46,13 @@ taskController.getTasksByUser = async(req, res) => {
     try {
         const userId = req.body.user_id;
 
-        const tasksByUser = await Task.find({
-            user_id: userId
-        })
-        .populate('user_id')
-        //.populate('service_id')
+        const tasksByUser = await taskService.getTasksbyUser(userId);
 
         return res.status(200).json({
             succcess: true,
             message: "Tasks by user retrieved",
             data: tasksByUser
-        })
-        
+        })        
     } catch (error) {
         return res.status(500).json({
             success: false,
