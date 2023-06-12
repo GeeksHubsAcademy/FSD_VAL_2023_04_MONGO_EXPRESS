@@ -19,6 +19,9 @@ const UserSchema = new mongoose.Schema(
             type: String,
             enum: ['user', 'admin', 'super_admin'],
             required: true
+        },
+        age: {
+            type: String
         }
     },
     {

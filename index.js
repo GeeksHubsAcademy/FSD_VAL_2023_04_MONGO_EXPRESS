@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const db = require('./db');
-const User = require('./models/User');
+const userController = require('./controllers/userController');
 
 const app = express();
 
@@ -9,40 +9,24 @@ app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
 
-app.post('/users', async (req, res) => {
+app.post('/users', userController.createUser)
+app.get('/users', userController.getAllUsers)
+app.delete('/users/:id', userController.destroyUser)
 
-    try {
-        const name = req.body.name;
-        const email = req.body.email;
-        const password = req.body.password;
+// db().then(() => {
+//     console.log('hola');
+// })
 
-        // const { name, email, password } =  req.body;
+// app.listen(PORT, () => {
+//     console.log("Server runinng on port: " + PORT);
+// })
 
-        const user = await User.create(
-            {
-                name,
-                email: email,
-                password: password,
-                role: "user"
-            }
-        )
-
-        return res.json({
-            success: true,
-            message: "User registered",
-            data: user
-        })
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            message: "User cant be registered",
-            error: error.message
-        })
-    }
-})
-
-db();
-
-app.listen(PORT, () => {
-    console.log("Server runinng on port: " + PORT);
-})
+db()
+    .then(() => {
+        app.listen(PORT, () => {
+            console.log('Server is running: ' + PORT);
+        });
+    })
+    .catch((error) => {
+        console.log("Error Connecting to mongoDB", error);
+    });
